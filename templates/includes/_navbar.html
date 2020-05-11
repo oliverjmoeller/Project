@@ -8,11 +8,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
 
-            <a class="navbar-brand" href="/">Flask App</a>
+            <a class="navbar-brand" href="/">Home</a>
 
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="/match_record">Match Record</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/about">About</a>
@@ -34,11 +34,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/control_panel">Control Panel</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/match_edit">Manage Matches</a>
+                </li>
                 {% endif %}
 
                 {% if current_user.is_admin() or current_user.is_user() %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/dashboard">Dashboard</a>
+                    <a class="nav-link" href="/add_match">Add Match</a>
                 </li>
                 {% endif %}
 

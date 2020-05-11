@@ -10,19 +10,29 @@ from functools import wraps
 
 import pymysql
 import secrets
+import os
+
+#dbuser = os.environ.get('DBUSER')
+#dbpass = os.environ.get('DBPASS')
+#dbhost = os.environ.get('DBHOST')
+#dbname = os.environ.get('DBNAME')
 
 
 conn = "mysql+pymysql://{0}:{1}@{2}/{3}".format(secrets.dbuser, secrets.dbpass, secrets.dbhost, secrets.dbname)
-
+#conn = "mysql+pymysql://{0}:{1}@{2}/{3}".format(dbuser, dbpass, dbhost, dbname)
 # Open database connection
-#dbhost = secrets.dbhost
-#dbuser = secrets.dbuser
-#dbpass = secrets.dbpass
-#dbname = secrets.dbname
+dbhost = secrets.dbhost
+dbuser = secrets.dbuser
+dbpass = secrets.dbpass
+dbname = secrets.dbname
 
 #db = pymysql.connect(dbhost, dbuser, dbpass, dbname)
 
+
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'SuperSecretKey'
+app.config['SQLALCHEMY_DATABASE_URI'] = conn
+#db = SQLAlchemy(app)
 
 login = LoginManager(app)
 login.login_view = 'login'
@@ -114,7 +124,7 @@ ACCESS = {
 }
 
 class User(UserMixin, db.Model):
-    __tablename__ = 'users'
+    __tablename__ = 'omoeller_users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     email = db.Column(db.String(100))
@@ -147,6 +157,28 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User {0}>'.format(self.username)
+
+class omoeller_matches(db.Model):
+    match_no = db.Column(db.Integer, primary_key=True)
+    player_name_01 = db.Column(db.String(100))
+    player_name_02 = db.Column(db.String(100))
+    player_name_03 = db.Column(db.String(100))
+    player_name_04 = db.Column(db.String(100))
+    player_score_01 = db.Column(db.Integer)
+    player_score_02 = db.Column(db.Integer)
+    player_score_03 = db.Column(db.Integer)
+    player_score_04 = db.Column(db.Integer) 
+
+class matchForm(FlaskForm):
+    match_no = IntegerField('Match No:')
+    player_name_01 = StringField('Player 01 Name:', validators=[DataRequired()])
+    player_name_02 = StringField('Player 02 Name:', validators=[DataRequired()])
+    player_name_03 = StringField('Player 03 Name:')
+    player_name_04 = StringField('Player 04 Name:')
+    player_score_01 = IntegerField('Player 01 Score:', validators=[DataRequired()])
+    player_score_02 = IntegerField('Player 02 Score:', validators=[DataRequired()])
+    player_score_03 = IntegerField('Player 03 Score:')
+    player_score_04 = IntegerField('Player 03 Score:')
 
 
 
@@ -182,6 +214,7 @@ def requires_access_level(access_level):
 @app.route('/')
 @app.route('/index')
 def index():
+    
     return render_template('index.html', pageTitle='Flask App Home Page')
 
 # about
@@ -347,6 +380,75 @@ def new_user():
 
     return render_template('new_user.html',  pageTitle='New User | My Flask App', form=form)
 
+# add Match
+@app.route('/add_match', methods=['GET','POST'])
+@requires_access_level(ACCESS['user'])
+def add_match():
+    form = matchForm()
+    if form.validate_on_submit():
+        match = omoeller_matches(player_name_01 = form.player_name_01.data, player_name_02 = form.player_name_02.data, player_name_03 = form.player_name_03.data, player_name_04 = form.player_name_04.data, player_score_01 = form.player_score_01.data, player_score_02 = form.player_score_02.data, player_score_03 = form.player_score_03.data,player_score_04 = form.player_score_04.data)
+        db.session.add(match)
+        db.session.commit()
+        #return "<h2> New match added to database, containing players: {0}, {1}, {2}, {3} and scores: {4},{5},{6},{7} respectively".format(form.player_name_01.data, form.player_name_02.data, form.player_name_03.data, form.player_name_04.data, form.player_score_01.data, form.player_score_02.data, form.player_score_03.data, form.player_score_04.data)
+        flash('You have successfully added match.', 'success')
+        return redirect("/match_record")
+    return render_template('add_match.html', form=form, pageTitle='Add NEW Match Info')
+
+# Match record 
+@app.route('/match_record')
+def match_record():
+    all_matches = omoeller_matches.query.all()
+    return render_template('match_record.html', matches = all_matches, pageTitle ="Match Records")
+
+@app.route('/match_edit')
+@requires_access_level(ACCESS['admin'])
+def match_edit():
+    all_matches2 = omoeller_matches.query.all()
+    return render_template('match_edit.html', matches = all_matches2, pageTitle ="Manage Match Records")
+
+@app.route('/delete_match/<int:match_no>', methods=['GET', 'POST'])
+def delete_match(match_no):
+    if request.method == 'POST':
+        match = omoeller_matches.query.get_or_404(match_no)
+        db.session.delete(match)
+        db.session.commit()
+        return redirect("/match_edit")
+    else:
+        return redirect("/match_edit")
+
+@app.route('/match/<int:match_no>', methods=['GET', 'POST'])
+def get_match(match_no):
+    match = omoeller_matches.query.get_or_404(match_no)
+    return render_template('match.html', form = match, pageTitle='Match Details')
+
+@app.route('/match/<int:match_no>/update', methods=['GET', 'POST'])
+def update_match(match_no):
+    match = omoeller_matches.query.get_or_404(match_no)
+    form = matchForm()
+
+    if form.validate_on_submit():
+        match.player_name_01 = form.player_name_01.data
+        match.player_name_02 = form.player_name_02.data
+        match.player_name_03 = form.player_name_03.data
+        match.player_name_04 = form.player_name_04.data
+        match.player_score_01 = form.player_score_01.data
+        match.player_score_02 = form.player_score_02.data
+        match.player_score_03 = form.player_score_03.data
+        match.player_score_04 = form.player_score_04.data
+        db.session.commit()
+        return redirect(url_for('get_match', match_no = match.match_no))
+    form.match_no =match.match_no
+    form.player_name_01.data = match.player_name_01
+    form.player_name_02.data = match.player_name_02
+    form.player_name_03.data = match.player_name_03
+    form.player_name_04.data = match.player_name_04
+    form.player_score_01.data = match.player_score_01
+    form.player_score_02.data = match.player_score_02
+    form.player_score_03.data = match.player_score_03
+    form.player_score_04.data = match.player_score_04
+    return render_template('update_match.html', form=form, pageTitle ='Update Match')
+
+    
 
 
 

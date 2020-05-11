@@ -1,0 +1,38 @@
+
+
+{% extends 'base.html' %}
+
+{% block body %}
+{% if matches %}
+<table>
+  <thead>
+    <tr>
+      <th>Match No.</th>
+      <th>Player #1</th>
+      <th>Player #2</th>
+      <th>Player #3</th>
+      <th>Player #4</th>
+      <th>Player #1 Score</th>
+      <th>Player #2 Score</th>
+      <th>Player #3 Score</th>
+      <th>Player #4 Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in matches %}
+    <tr>
+      <td>{{row.match_no}}</td>
+      <td>{{row.player_name_01}}</td>
+      <td>{{row.player_name_02}}</td>
+      <td>{{row.player_name_03}}</td>
+      <td>{{row.player_name_04}}</td>
+      <td>{{row.player_score_01}}</td>
+      <td>{{row.player_score_02}}</td>
+      <td>{{row.player_score_03}}</td>
+      <td>{{row.player_score_04}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

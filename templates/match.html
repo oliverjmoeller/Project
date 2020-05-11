@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block body %}
+<div>
+	<h1>Match Update</h1>
+	{% if form %}
+	<form method="POST" action="">
+		{{form.csrf_token}}
+		{{form.match_no.label}} {{form.match_no}}
+		{{form.player_name_01.label}} {{form.player_name_01}}
+		{{form.player_name_02.label}} {{form.player_name_02}}
+		{{form.player_name_03.label}} {{form.player_name_03}}
+		{{form.player_name_04.label}} {{form.player_name_04}}
+		{{form.player_score_01.label}} {{form.player_score_01}}
+		{{form.player_score_02.label}} {{form.player_score_02}}
+		{{form.player_score_03.label}} {{form.player_score_03}}
+		{{form.player_score_04.label}} {{form.player_score_04}}
+
+		<input type ="submit" formaction="{{url_for('update_match', match_no = form.match_no)}}" value = 'Update'>
+		<input type ="submit" formaction="{{url_for('delete_match', match_no = form.match_no)}}" value = 'Delete'>
+	</form>
+	{% endif %}
+</div>
+{% endblock %}
