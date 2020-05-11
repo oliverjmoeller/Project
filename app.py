@@ -9,7 +9,7 @@ from flask_login import LoginManager, UserMixin, current_user, login_user, logou
 from functools import wraps
 
 import pymysql
-#import secrets
+import secrets
 import os
 
 dbuser = os.environ.get('DBUSER')
@@ -30,8 +30,8 @@ conn = "mysql+pymysql://{0}:{1}@{2}/{3}".format(dbuser, dbpass, dbhost, dbname)
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'SuperSecretKey'
-app.config['SQLALCHEMY_DATABASE_URI'] = conn
+#app.config['SECRET_KEY'] = 'SuperSecretKey'
+#app.config['SQLALCHEMY_DATABASE_URI'] = conn
 #db = SQLAlchemy(app)
 
 login = LoginManager(app)
