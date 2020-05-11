@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 
 {% block body %}
+<h1>Manage Match Records</h1>
+<div>
 {% if matches %}
-<table>
+<table class ="table table-bordered table-dark">
   <thead>
     <tr>
       <th>Match No.</th>
@@ -30,7 +32,7 @@
 	  <td>{{row.player_score_04}}</td>
 	  <td>
 		  <form action="{{url_for('get_match', match_no = row.match_no) }}" method ='POST'>
-			  <input type="submit" value= 'EDIT'>
+			  <input type="submit" value= 'EDIT' class="btn btn-light">
 		  </form>
 	  </td>
     </tr>
@@ -38,4 +40,5 @@
   </tbody>
 </table>
 {% endif %}
+</div>
 {% endblock %}

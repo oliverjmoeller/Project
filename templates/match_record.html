@@ -3,8 +3,10 @@
 {% extends 'base.html' %}
 
 {% block body %}
+<h1>Current Match Records</h1>
+<div>
 {% if matches %}
-<table>
+<table class ="table table-bordered table-dark">
   <thead>
     <tr>
       <th>Match No.</th>
@@ -35,4 +37,5 @@
   </tbody>
 </table>
 {% endif %}
+</div>
 {% endblock %}

@@ -4,15 +4,43 @@
 	<h1>Update Match</h1>
 	<form method="POST" action="">
 		{{form.csrf_token}}
-		{{form.player_name_01.label}} {{form.player_name_01(size=20)}}
-		{{form.player_name_02.label}} {{form.player_name_02(size=20)}}
-		{{form.player_name_03.label}} {{form.player_name_03(size=20)}}
-		{{form.player_name_04.label}} {{form.player_name_04(size=20)}}
-		{{form.player_score_01.label}} {{form.player_score_01(siz=20)}}
-		{{form.player_score_02.label}} {{form.player_score_02(size=20)}}
-		{{form.player_score_03.label}} {{form.player_score_03(size=20)}}
-		{{form.player_score_04.label}} {{form.player_score_04(size=20)}}
-		<input type ="submit" value ="SAVE">
+	<div class ="form-group">
+		<label >Player #1 :</label>
+		{{form.player_name_01(size=32, class="form-control")}}
+	</div>
+	<div class="form=group">
+		<label>Player #1 Score :</label>
+		{{form.player_score_01(size=32, class="form-control")}}
+	</div>
+	<br>
+	<div class ="form-group">
+		<label >Player #2 :</label>
+		{{form.player_name_02(size=32, class="form-control")}}
+	</div>
+	<div class="form=group">
+		<label>Player #2 Score :</label>
+		{{form.player_score_02(size=32, class="form-control")}}
+	</div>
+	<br>
+	<div class ="form-group">
+		<label >Player #3 :</label>
+		{{form.player_name_03(size=32, class="form-control")}}
+	</div>
+	<div class="form=group">
+		<label>Player #3 Score :</label>
+		{{form.player_score_03(size=32, class="form-control")}}
+	</div>
+	<br>
+	<div class ="form-group">
+		<label >Player #4 :</label>
+		{{form.player_name_04(size=32, class="form-control")}}
+	</div>
+	<div class="form=group">
+		<label>Player #4 Score :</label>
+		{{form.player_score_04(size=32, class="form-control")}}
+	</div>
+<br>
+		<input type ="submit" value ="SAVE" class="btn btn-dark">
 
 	</form>
 	

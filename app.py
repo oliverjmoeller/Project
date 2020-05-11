@@ -215,12 +215,9 @@ def requires_access_level(access_level):
 @app.route('/index')
 def index():
     
-    return render_template('index.html', pageTitle='Flask App Home Page')
+    return render_template('index.html', pageTitle='Smash App')
 
-# about
-@app.route('/about')
-def about():
-    return render_template('about.html', pageTitle='About My Flask App')
+
 
 # registration
 @app.route('/register', methods=['GET', 'POST'])
@@ -235,7 +232,7 @@ def register():
         db.session.commit()
         flash('Congratulations, you are now a registered user!', 'success')
         return redirect(url_for('login'))
-    return render_template('register.html',  pageTitle='Register | My Flask App', form=form)
+    return render_template('register.html',  pageTitle='Register', form=form)
 
 # user login
 @app.route('/login', methods=['GET', 'POST'])
@@ -255,7 +252,7 @@ def login():
             next_page = url_for('index')
         flash('You are now logged in', 'success')
         return redirect(next_page)
-    return render_template('login.html',  pageTitle='Login | My Flask App', form=form)
+    return render_template('login.html',  pageTitle='Login', form=form)
 
 
 #logout
@@ -290,13 +287,7 @@ def account():
 
 
 
-################ USER ACCESS FUNCTIONALITY OR GREATER ###################
 
-# dashboard
-@app.route('/dashboard')
-@requires_access_level(ACCESS['user'])
-def dashboard():
-    return render_template('dashboard.html', pageTitle='My Flask App Dashboard')
 
 
 ################ ADMIN ACCESS FUNCTIONALITY ###################
@@ -306,7 +297,7 @@ def dashboard():
 @requires_access_level(ACCESS['admin'])
 def control_panel():
     all_users = User.query.all()
-    return render_template('control_panel.html', users=all_users, pageTitle='My Flask App Control Panel')
+    return render_template('control_panel.html', users=all_users, pageTitle='Control Panel')
 
 # user details & update
 @app.route('/user_detail/<int:user_id>', methods=['GET','POST'])
