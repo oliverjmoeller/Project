@@ -26,7 +26,7 @@ conn = "mysql+pymysql://{0}:{1}@{2}/{3}".format(dbuser, dbpass, dbhost, dbname)
 #dbpass = secrets.dbpass
 #dbname = secrets.dbname
 
-db = pymysql.connect(dbhost, dbuser, dbpass, dbname)
+#db = pymysql.connect(dbhost, dbuser, dbpass, dbname)
 
 
 app = Flask(__name__)
