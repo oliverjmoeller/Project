@@ -9,7 +9,7 @@ from flask_login import LoginManager, UserMixin, current_user, login_user, logou
 from functools import wraps
 
 import pymysql
-import secrets
+#import secrets
 import os
 
 dbuser = os.environ.get('DBUSER')
